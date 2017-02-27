@@ -6,12 +6,12 @@ node('master') {
   
   stage "Build"
   
-  sh 'dotnet restore frontend/Web/project.json'
-  sh 'dotnet publish frontend/Web/project.json -r ubuntu.14.04-x64'
+  sh 'dotnet restore web/project.json'
+  sh 'dotnet publish web/project.json -r ubuntu.14.04-x64'
    
   stage "Upload artifacts" 
    
-  dir('frontend/Web/bin/Debug/netcoreapp1.1/publish') {
+  dir('web/bin/Debug/netcoreapp1.1/publish') {
     step([
       $class: 'WAStoragePublisher', 
       allowAnonymousAccess: false, 
@@ -33,7 +33,7 @@ node('master') {
   
   stage name:"Deploy", concurrency: 1
 
-  dir('frontend/Web/bin/Debug/netcoreapp1.1/publish') {
+  dir('web/bin/Debug/netcoreapp1.1/publish') {
       sshagent(['9adb98ac-dfd7-4de1-8a10-968a6a4f9a16']) {
         try {
             sh  """ssh lucasus@10.30.0.5 'kill -9 `ps aux | grep \"dotnet\" | awk -F \" \" '"'"'{print \$2}'\"'\"' | head -n 1`'"""
