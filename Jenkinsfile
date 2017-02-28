@@ -44,7 +44,7 @@ node('master') {
           
         sh 'rsync -av ./ lucasus@10.30.0.5:~/web'
         
-        sh 'ssh lucasus@10.30.0.5 \'dotnet web/Web.dll > /dev/null &\''
+        sh 'ssh lucasus@10.30.0.5 \'dotnet web/web.dll > /dev/null &\''
       }
   }
 
