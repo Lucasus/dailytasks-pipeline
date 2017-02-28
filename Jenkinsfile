@@ -42,9 +42,9 @@ node('master') {
             echo "No process to kill"
         }
           
-        sh 'rsync -av ./ lucasus@10.30.0.5:~/web'
+        sh 'rsync -av ./ lucasus@10.30.0.5:~'
         
-        sh 'ssh lucasus@10.30.0.5 \'cd web > /dev/null && dotnet web.dll > /dev/null &\''
+        sh 'ssh lucasus@10.30.0.5 \'dotnet web.dll > /dev/null &\''
       }
   }
 
