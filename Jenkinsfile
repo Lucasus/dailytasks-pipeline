@@ -6,8 +6,15 @@ node('master') {
   
   stage "Build"
   
-  sh 'dotnet restore web/project.json'
-  sh 'dotnet publish web/project.json -r ubuntu.14.04-x64'
+  dir('frontend') {
+    sh 'npm install'
+    sh 'npm run build'
+  }
+    
+  dif('web') {
+    sh 'dotnet restore project.json'
+    sh 'dotnet publish project.json -r ubuntu.14.04-x64'
+  }
    
   stage "Upload artifacts" 
    
