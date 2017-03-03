@@ -15,6 +15,13 @@ node('master') {
       sh 'dotnet publish project.json -r ubuntu.14.04-x64'
     }
   }
+    
+  stage("Test") {
+    dir('Tests') {
+      sh 'dotnet restore project.json'
+      sh 'dotnet test'
+    }
+  }
      
   stage("Upload artifacts") {
     dir('Web/bin/Debug/netcoreapp1.1/publish') {
