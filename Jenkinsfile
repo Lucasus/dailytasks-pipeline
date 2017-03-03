@@ -23,7 +23,7 @@ node('master') {
     }
   }
      
-  stage("Upload artifacts") {
+  stage("Archive") {
     dir('Web/bin/Debug/netcoreapp1.1/publish') {
       step([
         $class: 'WAStoragePublisher', 
