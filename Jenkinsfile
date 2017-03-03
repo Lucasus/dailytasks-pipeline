@@ -19,7 +19,8 @@ node('master') {
   stage("Test") {
     dir('Tests') {
       sh 'dotnet restore project.json'
-      sh 'dotnet test'
+      sh 'dotnet test -xml report.xml'
+      junit 'report.xml'
     }
   }
      
