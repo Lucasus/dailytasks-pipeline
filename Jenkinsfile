@@ -10,14 +10,14 @@ node('master') {
       sh 'npm run build'
     }
 
-    dir('web') {
+    dir('Web') {
       sh 'dotnet restore project.json'
       sh 'dotnet publish project.json -r ubuntu.14.04-x64'
     }
   }
      
   stage("Upload artifacts") {
-    dir('web/bin/Debug/netcoreapp1.1/publish') {
+    dir('Web/bin/Debug/netcoreapp1.1/publish') {
       step([
         $class: 'WAStoragePublisher', 
         allowAnonymousAccess: false, 
@@ -40,7 +40,7 @@ node('master') {
      
   stage name:"Deploy", concurrency: 1
 
-  dir('web/bin/Debug/netcoreapp1.1/publish') {
+  dir('Web/bin/Debug/netcoreapp1.1/publish') {
     sshagent(['9adb98ac-dfd7-4de1-8a10-968a6a4f9a16']) {
       try {
         sh  """ssh lucasus@10.30.0.5 'kill -9 `ps aux | grep \"dotnet\" | awk -F \" \" '"'"'{print \$2}'\"'\"' | head -n 1`'"""
@@ -50,7 +50,7 @@ node('master') {
       }
 
       sh 'rsync -av ./ lucasus@10.30.0.5:~'
-      sh 'ssh lucasus@10.30.0.5 \'dotnet web.dll > /dev/null &\''
+      sh 'ssh lucasus@10.30.0.5 \'dotnet Web.dll > /dev/null &\''
     }
   }
 }
