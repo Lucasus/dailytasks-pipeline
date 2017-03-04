@@ -20,7 +20,33 @@ node('master') {
     dir('Tests') {
       sh 'dotnet restore project.json'
       sh 'dotnet test -xml report.xml'
-      junit 'report.xml'
+      
+      step([
+          $class: 'XUnitBuilder', 
+          testTimeMargin: '3000', 
+          thresholdMode: 1, 
+          thresholds: [[
+              $class: 'FailedThreshold', 
+              failureNewThreshold: '', 
+              failureThreshold: '', 
+              unstableNewThreshold: '', 
+              unstableThreshold: ''
+          ], [
+              $class: 'SkippedThreshold', 
+              failureNewThreshold: '', f
+              ailureThreshold: '', 
+              unstableNewThreshold: '', 
+              unstableThreshold: ''
+          ]], 
+          tools: [[
+              $class: 'XUnitDotNetTestType', 
+              deleteOutputFiles: true, 
+              failIfNotNew: true, 
+              pattern: 'report.xml', 
+              skipNoTestFiles: false, 
+              stopProcessingIfError: true
+          ]]])
+        
     }
   }
      
