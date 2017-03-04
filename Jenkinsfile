@@ -33,7 +33,7 @@ node('master') {
               unstableThreshold: ''
           ], [
               $class: 'SkippedThreshold', 
-              failureNewThreshold: '', f
+              failureNewThreshold: '',
               failureThreshold: '', 
               unstableNewThreshold: '', 
               unstableThreshold: ''
