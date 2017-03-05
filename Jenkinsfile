@@ -8,13 +8,7 @@ node('master') {
  
   stage("Build") {
 
-    dir(ouputPackageDir) {
-      deleteDir()
-    }
-    
-    dir('Web/wwwroot') {
-      deleteDir()
-    }
+    sh 'git clean -df'
       
     dir('frontend') {
       sh 'npm install'
