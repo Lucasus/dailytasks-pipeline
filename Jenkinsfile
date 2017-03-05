@@ -1,3 +1,5 @@
+def ouputPackageDir = 'Web/bin/Debug/netcoreapp1.1/publish'
+
 node('master') {
     
   stage("Checkout") {
@@ -5,6 +7,15 @@ node('master') {
   }
  
   stage("Build") {
+
+    dir(ouputPackageDir) {
+      deleteDir()
+    }
+    
+    dir('Web/wwwroot') {
+      deleteDir()
+    }
+      
     dir('frontend') {
       sh 'npm install'
       sh 'npm run build'
@@ -57,7 +68,7 @@ node('master') {
     }
      
   stage("Archive") {
-    dir('Web/bin/Debug/netcoreapp1.1/publish') {
+    dir(ouputPackageDir) {
       step([
         $class: 'WAStoragePublisher', 
         allowAnonymousAccess: false, 
@@ -80,7 +91,7 @@ node('master') {
      
   stage name:"Deploy", concurrency: 1
 
-  dir('Web/bin/Debug/netcoreapp1.1/publish') {
+  dir(ouputPackageDir) {
     sshagent(['9adb98ac-dfd7-4de1-8a10-968a6a4f9a16']) {
       try {
         sh  """ssh lucasus@10.30.0.5 'kill -9 `ps aux | grep \"dotnet\" | awk -F \" \" '"'"'{print \$2}'\"'\"' | head -n 1`'"""
@@ -89,6 +100,7 @@ node('master') {
         echo "No process to kill"
       }
 
+      sh 'ssh lucasus@10.30.0.5 \'rm -rf\''
       sh 'rsync -av ./ lucasus@10.30.0.5:~'
       sh 'ssh lucasus@10.30.0.5 \'dotnet Web.dll > /dev/null &\''
     }
