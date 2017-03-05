@@ -79,7 +79,7 @@ node('master') {
         doNotUploadIndividualFiles: false, 
         doNotWaitForPreviousBuild: false, 
         excludeFilesPath: '', 
-        filesPath: '*.*', 
+        filesPath: '**/*.*', 
         storageAccName: 'dtjenkinsstorage', 
         storageCredentialId: '281abd2d8b5a6c21214a3270131d7478', 
         uploadArtifactsOnlyIfSuccessful: false, 
