@@ -100,7 +100,7 @@ node('master') {
         echo "No process to kill"
       }
 
-      sh 'ssh lucasus@10.30.0.5 \'rm -rf\''
+      sh 'ssh lucasus@10.30.0.5 \'rm * -rf\''
       sh 'rsync -av ./ lucasus@10.30.0.5:~'
       sh 'ssh lucasus@10.30.0.5 \'dotnet Web.dll > /dev/null &\''
     }
