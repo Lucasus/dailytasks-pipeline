@@ -8,7 +8,7 @@ node('master') {
  
   stage("Build") {
 
-    sh 'git clean -df'
+    sh 'git clean -xdf'
       
     dir('frontend') {
       sh 'npm install'
