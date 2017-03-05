@@ -28,16 +28,16 @@ node('master') {
       thresholdMode: 1, 
       thresholds: [[
           $class: 'FailedThreshold', 
-          failureNewThreshold: '', 
-          failureThreshold: '', 
-          unstableNewThreshold: '', 
-          unstableThreshold: ''
+          failureNewThreshold: '0', 
+          failureThreshold: '0', 
+          unstableNewThreshold: '0', 
+          unstableThreshold: '0'
       ], [
           $class: 'SkippedThreshold', 
-          failureNewThreshold: '',
-          failureThreshold: '', 
-          unstableNewThreshold: '', 
-          unstableThreshold: ''
+          failureNewThreshold: '0',
+          failureThreshold: '0', 
+          unstableNewThreshold: '0', 
+          unstableThreshold: '0'
       ]], 
       tools: [[
           $class: 'XUnitDotNetTestType', 
@@ -47,7 +47,7 @@ node('master') {
           skipNoTestFiles: false, 
           stopProcessingIfError: true
       ],[
-          $class: 'XUnitDotNetTestType', 
+          $class: 'JUnitType', 
           deleteOutputFiles: true, 
           failIfNotNew: true, 
           pattern: 'frontend/results/tests.xml', 
