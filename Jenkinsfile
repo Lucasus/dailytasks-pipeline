@@ -20,35 +20,41 @@ node('master') {
     dir('Tests') {
       sh 'dotnet restore project.json'
       sh 'dotnet test -xml report.xml'
-      
-      step([
-          $class: 'XUnitBuilder', 
-          testTimeMargin: '3000', 
-          thresholdMode: 1, 
-          thresholds: [[
-              $class: 'FailedThreshold', 
-              failureNewThreshold: '', 
-              failureThreshold: '', 
-              unstableNewThreshold: '', 
-              unstableThreshold: ''
-          ], [
-              $class: 'SkippedThreshold', 
-              failureNewThreshold: '',
-              failureThreshold: '', 
-              unstableNewThreshold: '', 
-              unstableThreshold: ''
-          ]], 
-          tools: [[
-              $class: 'XUnitDotNetTestType', 
-              deleteOutputFiles: true, 
-              failIfNotNew: true, 
-              pattern: 'report.xml', 
-              skipNoTestFiles: false, 
-              stopProcessingIfError: true
-          ]]])
-        
     }
-  }
+      
+    step([
+      $class: 'XUnitBuilder', 
+      testTimeMargin: '3000', 
+      thresholdMode: 1, 
+      thresholds: [[
+          $class: 'FailedThreshold', 
+          failureNewThreshold: '', 
+          failureThreshold: '', 
+          unstableNewThreshold: '', 
+          unstableThreshold: ''
+      ], [
+          $class: 'SkippedThreshold', 
+          failureNewThreshold: '',
+          failureThreshold: '', 
+          unstableNewThreshold: '', 
+          unstableThreshold: ''
+      ]], 
+      tools: [[
+          $class: 'XUnitDotNetTestType', 
+          deleteOutputFiles: true, 
+          failIfNotNew: true, 
+          pattern: 'Tests/report.xml', 
+          skipNoTestFiles: false, 
+          stopProcessingIfError: true
+      ],[
+          $class: 'XUnitDotNetTestType', 
+          deleteOutputFiles: true, 
+          failIfNotNew: true, 
+          pattern: 'frontend/results/tests.xml', 
+          skipNoTestFiles: false, 
+          stopProcessingIfError: true
+      ]]])      
+    }
      
   stage("Archive") {
     dir('Web/bin/Debug/netcoreapp1.1/publish') {
