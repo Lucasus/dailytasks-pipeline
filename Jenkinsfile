@@ -42,7 +42,7 @@ node('master') {
 
   dir(ouputPackageDir) {
     sshagent(['9adb98ac-dfd7-4de1-8a10-968a6a4f9a16']) {
-      sh 'ssh lucasus@10.30.0.5 \'rm * -rf\''
+      sh 'ssh lucasus@10.30.0.10 \'rm * -rf\''
       sh 'rsync -av ./ lucasus@10.30.0.10:~'
     }
   }
