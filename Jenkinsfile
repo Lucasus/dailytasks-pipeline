@@ -1,4 +1,4 @@
-def ouputPackageDir = 'Web/bin/Debug/netcoreapp1.1/publish'
+def ouputPackageDir = 'frontend/dist'
 
 node('master') {
     
@@ -14,53 +14,8 @@ node('master') {
       sh 'npm install'
       sh 'npm run build'
     }
-
-    dir('Web') {
-      sh 'dotnet restore project.json'
-      sh 'dotnet publish project.json -r ubuntu.14.04-x64'
-    }
-  }
-    
-  stage("Test") {
-    dir('Tests') {
-      sh 'dotnet restore project.json'
-      sh 'dotnet test -xml report.xml'
-    }
-      
-    step([
-      $class: 'XUnitBuilder', 
-      testTimeMargin: '3000', 
-      thresholdMode: 1, 
-      thresholds: [[
-          $class: 'FailedThreshold', 
-          failureNewThreshold: '0', 
-          failureThreshold: '0', 
-          unstableNewThreshold: '0', 
-          unstableThreshold: '0'
-      ], [
-          $class: 'SkippedThreshold', 
-          failureNewThreshold: '0',
-          failureThreshold: '0', 
-          unstableNewThreshold: '0', 
-          unstableThreshold: '0'
-      ]], 
-      tools: [[
-          $class: 'XUnitDotNetTestType', 
-          deleteOutputFiles: true, 
-          failIfNotNew: true, 
-          pattern: 'Tests/report.xml', 
-          skipNoTestFiles: false, 
-          stopProcessingIfError: true
-      ],[
-          $class: 'JUnitType', 
-          deleteOutputFiles: true, 
-          failIfNotNew: true, 
-          pattern: 'frontend/results/tests.xml', 
-          skipNoTestFiles: false, 
-          stopProcessingIfError: true
-      ]]])      
-    }
-     
+  }    
+ 
   stage("Archive") {
     dir(ouputPackageDir) {
       step([
@@ -74,8 +29,8 @@ node('master') {
         doNotWaitForPreviousBuild: false, 
         excludeFilesPath: '', 
         filesPath: '**/*.*', 
-        storageAccName: 'dtjenkinsstorage', 
-        storageCredentialId: '281abd2d8b5a6c21214a3270131d7478', 
+        storageAccName: '33ptxumln7fdkfastnote', 
+        storageCredentialId: 'fastnoteartifacts', 
         uploadArtifactsOnlyIfSuccessful: false, 
         uploadZips: false, 
         virtualPath: ''
@@ -87,16 +42,8 @@ node('master') {
 
   dir(ouputPackageDir) {
     sshagent(['9adb98ac-dfd7-4de1-8a10-968a6a4f9a16']) {
-      try {
-        sh  """ssh lucasus@10.30.0.5 'kill -9 `ps aux | grep \"dotnet\" | awk -F \" \" '"'"'{print \$2}'\"'\"' | head -n 1`'"""
-      } 
-      catch (all) {
-        echo "No process to kill"
-      }
-
       sh 'ssh lucasus@10.30.0.5 \'rm * -rf\''
-      sh 'rsync -av ./ lucasus@10.30.0.5:~'
-      sh 'ssh lucasus@10.30.0.5 \'dotnet Web.dll > /dev/null &\''
+      sh 'rsync -av ./ lucasus@10.30.0.10:~'
     }
   }
 }
