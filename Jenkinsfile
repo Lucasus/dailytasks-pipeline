@@ -3,7 +3,7 @@ def ouputPackageDir = 'frontend/dist'
 node('master') {
     
   stage("Checkout") {
-    git credentialsId: 'DailyTasks3', url: 'https://github.com/Lucasus/DailyTasks3.git'
+    git credentialsId: 'DailyTasks3', url: 'https://github.com/Lucasus/DailyTasks3.git', branch: 'fastnote'
   }
  
   stage("Build") {
