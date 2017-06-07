@@ -8,10 +8,10 @@ node('master') {
  
   stage("Build") {
 
-    sh 'git clean -xdf'
+    // sh 'git clean -xdf'
       
     dir('frontend') {
-      sh 'npm install'
+      // sh 'npm install'
       sh 'npm run build'
     }
   }    
