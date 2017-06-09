@@ -11,7 +11,7 @@ node('master') {
     // sh 'git clean -xdf'
       
     dir('frontend') {
-      // sh 'npm install'
+      sh 'npm install'
       sh 'npm run build'
     }
   }    
